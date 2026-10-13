@@ -1,7 +1,5 @@
 # WWW SPEEDTEST by YAHBALLON
 
-![App icon](https://raw.githubusercontent.com/Yahballon/PS5_WWW_SPEEDTEST/main/assets/icon0.png)
-
 Native PS5 Homebrew Speedtest with international servers, latency, live dashboard, local/remote IP and history. **v0.5.0** · **PPSA99573**.
 
 **Build:** [GitHub Actions](../../actions/workflows/build-www-speedtest.yml) · **Downloads:** [Releases](../../releases)
