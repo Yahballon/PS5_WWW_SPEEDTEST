@@ -1,0 +1,43 @@
+name: Commit Store Icon PNG
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/commit-store-icon.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  generate-icon:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Prepare Pillow
+        run: python3 -m pip install --break-system-packages Pillow
+      - name: Generate exact launcher artwork
+        run: python3 assets/generate_icon.py
+      - name: Commit 512x512 PNG for JB Store
+        run: |
+          set -euo pipefail
+          mkdir -p appname/sce_sys
+          cp app/sce_sys/icon0.png appname/sce_sys/icon0.png
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          p=Path('appname/sce_sys/icon0.png')
+          assert p.is_file()
+          with Image.open(p) as image:
+              assert image.format == 'PNG'
+              assert image.size == (512, 512)
+          print("JB Store PNG verified: ", p)
+          PY
+          git add appname/sce_sys/icon0.png
+          if git diff --cached --quiet; then
+            echo "Icon already committed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "assets: add 512x512 JB Store launcher icon"
+          git push
